@@ -75,6 +75,7 @@ faiss-cpu = "^1.8.0.post1"
 tiktoken = "^0.7.0"
 pytest = "^8.3.2"
 debugpy = "^1.8.5"
+hypercorn = "^0.17.3"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^8.0.2"
