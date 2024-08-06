@@ -20,7 +20,7 @@ def find_similar_prompts(query_embedding, db: Session):
     k = 2
     similarity_threshold = 0.98
     query = db.query(Prompt, Prompt.embedding.cosine_distance(query_embedding)
-            .label("distance")).filter(Prompt.embedding.cosine_distance(query_embedding) < similarity_threshold).order_by("distance").limit(k).all()
+            .label('distance')).filter(Prompt.embedding.cosine_distance(query_embedding) < similarity_threshold).order_by('distance').limit(k).all()
     
     return query
 

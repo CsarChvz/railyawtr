@@ -28,9 +28,9 @@ from app.utils.logger import logger
 
 load_dotenv()
 
-SECRET_KEY = os.getenv("SECRET_KEY", "default_secret_key")
-FRONT_HOST = os.getenv("FRONT_HOST")
-print("SECRETSEC_KEY")
+SECRET_KEY = os.getenv('SECRET_KEY', 'default_secret_key')
+FRONT_HOST = os.getenv('FRONT_HOST')
+print('SECRETSEC_KEY')
 
 print(SECRET_KEY)
 origins = [
@@ -42,16 +42,16 @@ app = FastAPI(
     title=get_settings().app_name,
     version=get_settings().version,
     summary=summary,
-    description="",
+    description='',
     openapi_tags=tags_metadata,
     license_info=license,
     redirect_slashes=False
 )
-app.include_router(api_router, prefix="/api/v1")
+app.include_router(api_router, prefix='/api/v1')
 
 origins = [
    FRONT_HOST, 
-    "http://localhost:3000" # Reemplaza con tu origen específico
+    'http://localhost:3000' # Reemplaza con tu origen específico
 ]
 
 # Configura CORS Middleware
@@ -59,7 +59,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["*"],  # Permitir todos los métodos HTTP
-    allow_headers=["*"],  # Permitir los encabezados necesarios
-    expose_headers=["*"],  # Exponer encabezados específicos
+    allow_methods=['*'],  # Permitir todos los métodos HTTP
+    allow_headers=['*'],  # Permitir los encabezados necesarios
+    expose_headers=['*'],  # Exponer encabezados específicos
 )

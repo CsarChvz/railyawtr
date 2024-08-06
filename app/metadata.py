@@ -1,9 +1,9 @@
-summary = "A FastAPI application with Open AI"
+summary = 'A FastAPI application with Open AI'
 
 license = {
-    "name": "MIT License",
-    "identifier": "MIT",
-    "description": ""
+    'name': 'MIT License',
+    'identifier': 'MIT',
+    'description': ''
 }
 
 

@@ -9,14 +9,14 @@ services:
     env_file:
       - app/.env
     ports:
-      - "5432:5432"
+      - '5432:5432'
     volumes:
       - ./scripts:/docker-entrypoint-initdb.d
       #- ./db-volume:/var/lib/postgresql/data
     networks:
       - dev-network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER}"]
+      test: ['CMD-SHELL', 'pg_isready -U $${POSTGRES_USER}']
       interval: 10s
       timeout: 5s
       retries: 5
@@ -37,7 +37,7 @@ services:
   #     POSTGRES_USER: ${POSTGRES_USER}
   #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
   #   ports:
-  #     - "8000:8000"
+  #     - '8000:8000'
   #   depends_on:
   #     dev-db:
   #       condition: service_healthy

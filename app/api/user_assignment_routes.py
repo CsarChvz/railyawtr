@@ -37,16 +37,16 @@ from app.services import (
 
 user_assignment_router = APIRouter()
 
-@user_assignment_router.get("/start")
+@user_assignment_router.get('/start')
 def start_assi(user_id: str, prompt_text: str, db: Session = Depends(get_db_session)):
 
-    """
+    '''
     Inica la sesión de estudio del usuario o la retoma si es que ya estudio el mismo prompt
 
     :param user_id: El usuario
     :param prompt_text: El texto del tema que se busca estudiar
     :param db: La sesión de base de datos.
-    """
+    '''
     # Buscamos si ya existe el prompt
     prompt = find_prompt_by_text(prompt_text, db)
     if not prompt:
@@ -78,12 +78,12 @@ def start_assi(user_id: str, prompt_text: str, db: Session = Depends(get_db_sess
     return get_first_assigned_question_service(user_id=user_id, deck_id=deck.id,db=db)
 
 
-@user_assignment_router.post("/answer_question")
+@user_assignment_router.post('/answer_question')
 def answer_question(question_assigned: int = Query(...), option_selected_id: int = Query(...), db: Session = Depends(get_db_session)):
     assignment_question = get_user_question_assignment_service(question_assigned, db)
     assignment_question.selected_option_id = option_selected_id
     if not assignment_question:
-        raise HTTPException(status_code=404, detail="Assignment not found")
+        raise HTTPException(status_code=404, detail='Assignment not found')
 
     correct_option = get_correct_option_service(assignment_question.question_id, db)
     is_correct = correct_option.id == option_selected_id
@@ -91,9 +91,9 @@ def answer_question(question_assigned: int = Query(...), option_selected_id: int
     schedule_review(assignment_question, is_correct,difficulty_question)
     db.commit()
 
-    return {"message": "Answer submitted", "correct": is_correct, "selected_option": option_selected_id}
+    return {'message': 'Answer submitted', 'correct': is_correct, 'selected_option': option_selected_id}
 
-@user_assignment_router.post("/next-question")
+@user_assignment_router.post('/next-question')
 def next_question(deck_id: int = Query(...), user_id: str = Query(...), db: Session = Depends(get_db_session)):
     today = datetime.datetime.now().date() - datetime.timedelta(days=1)
     user_level = calculate_user_level(user_id, deck_id, db)
@@ -114,7 +114,7 @@ def next_question(deck_id: int = Query(...), user_id: str = Query(...), db: Sess
     
     if not available_assignments:
         # A qui lo que se haría sería generar preguntas nuevas o tal vez repetir
-        raise HTTPException(status_code=404, detail="No questions available for today's session")
+        raise HTTPException(status_code=404, detail='No questions available for today's session')
 
     next_assignment = min(
         available_assignments,
@@ -129,7 +129,7 @@ def next_question(deck_id: int = Query(...), user_id: str = Query(...), db: Sess
     return UserAssignmentResult.model_validate(next_assignment)
 
 
-@user_assignment_router.post("/new-questions")
+@user_assignment_router.post('/new-questions')
 def generate_new_questions_route(
     user_id: str = Query(...),
     prompt_id: int = Query(...),
@@ -138,18 +138,18 @@ def generate_new_questions_route(
     # Verificar si el deck existe
     deck = get_deck_by_prompt_service(user_id, prompt_id, db)
     if not deck:
-        raise HTTPException(status_code=404, detail="Deck not found for this user and prompt")
+        raise HTTPException(status_code=404, detail='Deck not found for this user and prompt')
 
     # Obtener el prompt
     prompt = get_prompt(prompt_id, db)
     if not prompt:
-        raise HTTPException(status_code=404, detail="Prompt not found")
+        raise HTTPException(status_code=404, detail='Prompt not found')
 
     # Generar nuevas preguntas
     questions = generate_and_save_new_questions_services(prompt.text, prompt.id, db)
     print(len(questions))
     if not questions:
-        raise HTTPException(status_code=500, detail="Failed to generate new questions")
+        raise HTTPException(status_code=500, detail='Failed to generate new questions')
 
     # Asignar las nuevas preguntas al usuario
     assigned_questions = set_questions_assigned_to_deck_service(
@@ -162,11 +162,11 @@ def generate_new_questions_route(
 
     # Preparar la respuesta
     response = {
-        "message": "New questions generated and assigned successfully",
-        "num_questions_generated": len(questions),
-        "num_questions_assigned": len(assigned_questions) if assigned_questions else 0,
-        "deck_id": deck.id,
-        "prompt_id": prompt.id
+        'message': 'New questions generated and assigned successfully',
+        'num_questions_generated': len(questions),
+        'num_questions_assigned': len(assigned_questions) if assigned_questions else 0,
+        'deck_id': deck.id,
+        'prompt_id': prompt.id
     }
 
     return response
@@ -181,18 +181,18 @@ def generate_new_questions(
     # Verificar si el deck existe
     deck = get_deck_by_prompt_service(user_id, prompt_id, db)
     if not deck:
-        raise HTTPException(status_code=404, detail="Deck not found for this user and prompt")
+        raise HTTPException(status_code=404, detail='Deck not found for this user and prompt')
 
     # Obtener el prompt
     prompt = get_prompt(prompt_id, db)
     if not prompt:
-        raise HTTPException(status_code=404, detail="Prompt not found")
+        raise HTTPException(status_code=404, detail='Prompt not found')
 
     # Generar nuevas preguntas
     questions = generate_and_save_new_questions_services(prompt.text, prompt.id, db)
     print(len(questions))
     if not questions:
-        raise HTTPException(status_code=500, detail="Failed to generate new questions")
+        raise HTTPException(status_code=500, detail='Failed to generate new questions')
 
     # Asignar las nuevas preguntas al usuario
     assigned_questions = set_questions_assigned_to_deck_service(

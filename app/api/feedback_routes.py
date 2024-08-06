@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
 @feedback_router.post(
-    "/",
+    '/',
     response_model=FeedbackResponseSchema,
     status_code=201,
 )
@@ -35,11 +35,11 @@ def create_feedback(
         raise he
     except Exception as e:
         db.rollback()
-        logger.error(f"Unexpected error while creating feedback: {e}")
-        raise HTTPException(status_code=500, detail="Internal server error")
+        logger.error(f'Unexpected error while creating feedback: {e}')
+        raise HTTPException(status_code=500, detail='Internal server error')
 
 @feedback_router.get(
-    "/",
+    '/',
     response_model=List[FeedbackResponseSchema],
 )
 def get_feedbacks(
@@ -52,10 +52,10 @@ def get_feedbacks(
     except HTTPException as he:
         raise he
     except Exception:
-        raise HTTPException(status_code=500, detail="Internal server error")
+        raise HTTPException(status_code=500, detail='Internal server error')
 
 @feedback_router.get(
-    "/{feedback_id}",
+    '/{feedback_id}',
     response_model=FeedbackResponseSchema,
 )
 def get_feedback_by_id(
@@ -67,10 +67,10 @@ def get_feedback_by_id(
     except HTTPException as he:
         raise he
     except Exception:
-        raise HTTPException(status_code=500, detail="Internal server error")
+        raise HTTPException(status_code=500, detail='Internal server error')
 
 @feedback_router.put(
-    "/{feedback_id}",
+    '/{feedback_id}',
     response_model=FeedbackResponseSchema,
 )
 def update_feedback(
@@ -84,11 +84,11 @@ def update_feedback(
         raise he
     except Exception as e:
         db.rollback()
-        logger.error(f"Unexpected error while updating feedback: {e}")
-        raise HTTPException(status_code=500, detail="Internal server error")
+        logger.error(f'Unexpected error while updating feedback: {e}')
+        raise HTTPException(status_code=500, detail='Internal server error')
 
 @feedback_router.delete(
-    "/{feedback_id}",
+    '/{feedback_id}',
     response_model=FeedbackResponseSchema,
 )
 def delete_feedback(
@@ -101,5 +101,5 @@ def delete_feedback(
         raise he
     except Exception as e:
         db.rollback()
-        logger.error(f"Unexpected error while deleting feedback: {e}")
-        raise HTTPException(status_code=500, detail="Internal server error")
+        logger.error(f'Unexpected error while deleting feedback: {e}')
+        raise HTTPException(status_code=500, detail='Internal server error')

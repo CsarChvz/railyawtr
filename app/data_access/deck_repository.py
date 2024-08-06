@@ -9,7 +9,7 @@ def create_deck(user_id: str, prompt_id:int, db:Session):
     new_deck = Deck(
         user_id=user_id,
         prompt_id=prompt_id,
-        name=f"Deck of {prompt.text}"
+        name=f'Deck of {prompt.text}'
     )
     db.add(new_deck)
     db.commit()

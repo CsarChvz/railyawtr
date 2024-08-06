@@ -1,10 +1,10 @@
-"""schema updated
+'''schema updated
 
 Revision ID: f748170ff879
 Revises: 
 Create Date: 2024-08-05 15:40:13.142652
 
-"""
+'''
 from typing import Sequence, Union
 
 from alembic import op

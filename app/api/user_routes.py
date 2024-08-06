@@ -19,12 +19,12 @@ user_router = APIRouter()
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 load_dotenv()
-SECRET_KEY = os.getenv("SECRET_KEY")
+SECRET_KEY = os.getenv('SECRET_KEY')
 # @user_router.post(
-#     "/",
+#     '/',
 #     response_model=UserReturn,
 #     status_code=201,
-#     dependencies=[Depends(PermissionsValidator(["crud:admin-create-user"]))],
+#     dependencies=[Depends(PermissionsValidator(['crud:admin-create-user']))],
 # )
 # async def create_user(user: UserCreate, db: Session = Depends(get_db_session)):
 #     try:
@@ -32,11 +32,11 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 #     except HTTPException as he:
 #         raise he
 #     except Exception as e:
-#         logger.error(f"Unexpected error while creating user: {e}")
-#         raise HTTPException(status_code=500, detail="Internal server error")
+#         logger.error(f'Unexpected error while creating user: {e}')
+#         raise HTTPException(status_code=500, detail='Internal server error')
 
 @user_router.post(
-    "/",
+    '/',
     status_code=201,
     response_model=UserAuth0Base
 )
@@ -47,16 +47,16 @@ async def create_user(user: UserAuth0Base,  secret_key: str = Query(...), db: Se
         except HTTPException as he:
             raise he
         except Exception as e:
-            logger.error(f"Unexpected error while creating user: {e}")
-            raise HTTPException(status_code=500, detail="Internal server error")
+            logger.error(f'Unexpected error while creating user: {e}')
+            raise HTTPException(status_code=500, detail='Internal server error')
     
     else:
-        raise HTTPException(status_code=400, detail="Unaturoized")
+        raise HTTPException(status_code=400, detail='Unaturoized')
 
 
 
 @user_router.get(
-    "/{user_id}",
+    '/{user_id}',
     response_model=UserReturn,
     status_code=200,
 )
@@ -66,12 +66,12 @@ def get_user(user_id: str, db: Session = Depends(get_db_session)):
     except HTTPException as he:
         raise he
     except Exception as e:
-        logger.error(f"Unexpected error while retrieving user: {e}")
-        raise HTTPException(status_code=500, detail="Internal server error")
+        logger.error(f'Unexpected error while retrieving user: {e}')
+        raise HTTPException(status_code=500, detail='Internal server error')
 
 
 @user_router.put(
-    "/{user_id}/admin",
+    '/{user_id}/admin',
     response_model=UserReturn,
     status_code=200,
 )
@@ -83,12 +83,12 @@ def update_user_admin(
     except HTTPException as he:
         raise he
     except Exception as e:
-        logger.error(f"Unexpected error while updating user: {e}")
-        raise HTTPException(status_code=500, detail="Internal server error")
+        logger.error(f'Unexpected error while updating user: {e}')
+        raise HTTPException(status_code=500, detail='Internal server error')
 
 
 @user_router.put(
-    "/me",
+    '/me',
     response_model=UserReturn,
     status_code=200,
 )
@@ -101,14 +101,14 @@ def update_user_me(
     except HTTPException as he:
         raise he
     except Exception as e:
-        logger.error(f"Unexpected error while updating user: {e}")
-        raise HTTPException(status_code=500, detail="Internal server error")
+        logger.error(f'Unexpected error while updating user: {e}')
+        raise HTTPException(status_code=500, detail='Internal server error')
 
 
 
 
 @user_router.put(
-    "/{user_id}",
+    '/{user_id}',
     response_model=UserReturn,
     status_code=200,
 )
@@ -120,12 +120,12 @@ def update_user(
     except HTTPException as he:
         raise he
     except Exception as e:
-        logger.error(f"Unexpected error while updating user: {e}")
-        raise HTTPException(status_code=500, detail="Internal server error")
+        logger.error(f'Unexpected error while updating user: {e}')
+        raise HTTPException(status_code=500, detail='Internal server error')
 
 
 @user_router.delete(
-    "/{user_id}",
+    '/{user_id}',
     response_model=str,
     status_code=200,
 )
@@ -135,12 +135,12 @@ def delete_user(user_id: str, token: str = Query(...), db: Session = Depends(get
     except HTTPException as he:
         raise he
     except Exception as e:
-        logger.error(f"Unexpected error while deleting user: {e}")
-        raise HTTPException(status_code=500, detail="Internal server error")
+        logger.error(f'Unexpected error while deleting user: {e}')
+        raise HTTPException(status_code=500, detail='Internal server error')
 
 
 @user_router.get(
-    "/profile-user/me",
+    '/profile-user/me',
     response_model=UserReturn,
     status_code=200,
 )
@@ -153,5 +153,5 @@ def get_user_me(
     except HTTPException as he:
         raise he
     except Exception as e:
-        logger.error(f"Unexpected error while retrieving user: {e}")
-        raise HTTPException(status_code=500, detail="Internal server error")
+        logger.error(f'Unexpected error while retrieving user: {e}')
+        raise HTTPException(status_code=500, detail='Internal server error')

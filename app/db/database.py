@@ -7,14 +7,14 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 load_dotenv()
 
 # Obtener la URL de la base de datos desde las variables de entorno
-DEV_DATABASE_URL = os.getenv("DEV_DATABASE_URL")
+DEV_DATABASE_URL = os.getenv('DEV_DATABASE_URL')
 if DEV_DATABASE_URL is None:
-    print("IS NONE DEV--------")
-    DEV_DATABASE_URL = os.getenv("DEV_DATABASE_URL")
+    print('IS NONE DEV--------')
+    DEV_DATABASE_URL = os.getenv('DEV_DATABASE_URL')
 
 if not DEV_DATABASE_URL:
     raise ValueError(
-        "DEV_DATABASE_URL is not set. Please check your environment variables."
+        'DEV_DATABASE_URL is not set. Please check your environment variables.'
     )
 engine = create_engine(DEV_DATABASE_URL)
 

@@ -19,8 +19,8 @@ def get_deck_by_prompt_service(user_id:str, prompt_id: int, db: Session):
         return DeckResponse.model_validate(deck)
     except Exception as e:
         db.rollback()
-        logger.error(f"Unexpected error while retrieving deck of the prompt {prompt_id}: {e}")
-        raise HTTPException(status_code=500, detail="Internal server error")
+        logger.error(f'Unexpected error while retrieving deck of the prompt {prompt_id}: {e}')
+        raise HTTPException(status_code=500, detail='Internal server error')
 
 
 def create_deck_service(user_id:str, prompt_id: int, db:Session):
@@ -29,8 +29,8 @@ def create_deck_service(user_id:str, prompt_id: int, db:Session):
         return DeckResponse.model_validate(deck)
     except Exception as e:
         db.rollback()
-        logger.error(f"Unexpected error while retrieving deck of the prompt {prompt_id}: {e}")
-        raise HTTPException(status_code=500, detail="Internal server error")
+        logger.error(f'Unexpected error while retrieving deck of the prompt {prompt_id}: {e}')
+        raise HTTPException(status_code=500, detail='Internal server error')
 
 
 def get_deck_service(deck_id: int, db: Session):
@@ -39,6 +39,6 @@ def get_deck_service(deck_id: int, db: Session):
         return DeckResponse.model_validate(deck)
     except Exception as e:
         db.rollback()
-        logger.error(f"Unexpected error while retrieving deck of the prompt {deck_id}: {e}")
-        raise HTTPException(status_code=500, detail="Internal server error")
+        logger.error(f'Unexpected error while retrieving deck of the prompt {deck_id}: {e}')
+        raise HTTPException(status_code=500, detail='Internal server error')
 

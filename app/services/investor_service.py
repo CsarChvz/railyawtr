@@ -12,23 +12,23 @@ def create_investor_interest_service(investor_interest_data: InvestorInterestCre
         return InvestorInterestResponse.from_orm(new_investor_interest)
     except Exception as e:
         db.rollback()
-        logger.error(f"Unexpected error while creating investor interest: {e}")
-        raise HTTPException(status_code=500, detail="Internal server error")
+        logger.error(f'Unexpected error while creating investor interest: {e}')
+        raise HTTPException(status_code=500, detail='Internal server error')
 
 def get_investor_interests_service(skip: int, limit: int, db: Session) -> list[InvestorInterestResponse]:
     try:
         investor_interests = get_investor_interests(db, skip, limit)
         return [InvestorInterestResponse.from_orm(investor_interest) for investor_interest in investor_interests]
     except Exception as e:
-        logger.error(f"Error getting investor interests: {e}")
-        raise HTTPException(status_code=500, detail="Internal server error")
+        logger.error(f'Error getting investor interests: {e}')
+        raise HTTPException(status_code=500, detail='Internal server error')
 
 def get_investor_interest_service(investor_interest_id: int, db: Session) -> InvestorInterestResponse:
     try:
         investor_interest = get_investor_interest(db, investor_interest_id)
         if not investor_interest:
-            raise HTTPException(status_code=404, detail="Investor interest not found")
+            raise HTTPException(status_code=404, detail='Investor interest not found')
         return InvestorInterestResponse.from_orm(investor_interest)
     except Exception as e:
-        logger.error(f"Error getting investor interest: {e}")
-        raise HTTPException(status_code=500, detail="Internal server error")
+        logger.error(f'Error getting investor interest: {e}')
+        raise HTTPException(status_code=500, detail='Internal server error')

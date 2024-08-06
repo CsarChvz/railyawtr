@@ -10,16 +10,16 @@ from app.schemas.thread_result import ThreadResult
 
 
 class Threadistory(BaseModel):
-    prompt: PromptResult = Field(..., description="Prompt")
-    thread: List["ThreadResult"] = Field(..., description="List of the thread")
+    prompt: PromptResult = Field(..., description='Prompt')
+    thread: List['ThreadResult'] = Field(..., description='List of the thread')
 
 
     model_config = ConfigDict(arbitrary_types_allowed=True, from_attributes=True)
 
 
 class ThreadPromptIndividual(BaseModel):
-    prompt: PromptResult = Field(..., description="Prompt")
-    thread: ThreadResult= Field(..., description="Thread")
+    prompt: PromptResult = Field(..., description='Prompt')
+    thread: ThreadResult= Field(..., description='Thread')
 
 
     model_config = ConfigDict(arbitrary_types_allowed=True, from_attributes=True)
