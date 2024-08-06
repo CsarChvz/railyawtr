@@ -1,0 +1,141 @@
+[tool.poetry]
+name = "chop-fastapi"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "~3.12"
+fastapi = "^0.110.0"
+mangum = "^0.17.0"
+pydantic = "2.8.2"
+pydash = "7.0.7"
+jinja2 = "^3.1.4"
+httpx = "^0.27.0"
+alembic = "^1.13.1"
+annotated-types = "^0.6.0"
+anyio = "^4.4.0"
+Authlib = "^1.3.0"
+certifi = "^2024.2.2"
+cffi = "^1.16.0"
+charset-normalizer = "^3.3.2"
+click = "^8.1.7"
+colorama = "^0.4.6"
+cryptography = "^42.0.7"
+deepdiff = "^7.0.1"
+distro = "^1.9.0"
+docker = "^7.1.0"
+ecdsa = "^0.19.0"
+exceptiongroup = "^1.2.1"
+Faker = "^25.2.0"
+greenlet = "^3.0.3"
+h11 = "^0.14.0"
+httptools = "^0.6.1"
+idna = "^3.7"
+iniconfig = "^2.0.0"
+itsdangerous = "^2.2.0"
+loguru = "^0.7.2"
+Mako = "^1.3.5"
+MarkupSafe = "^2.1.5"
+openai = "^1.30.3"
+ordered-set = "^4.1.0"
+packaging = "^23.2"
+pluggy = "^1.5.0"
+psycopg2-binary = "^2.9.9"
+pyasn1 = "^0.6.0"
+pycparser = "^2.22"
+PyJWT = "^2.8.0"
+python-dateutil = "^2.9.0.post0"
+python-dotenv = "^1.0.1"
+python-jose = "^3.3.0"
+python-multipart = "^0.0.9"
+PyYAML = "^6.0.1"
+requests = "^2.32.2"
+rsa = "^4.9"
+secure = "^0.3.0"
+six = "^1.16.0"
+sniffio = "^1.3.1"
+SQLAlchemy = "^2.0.30"
+starlette = "^0.36.3"
+tomli = "^2.0.1"
+tqdm = "^4.66.4"
+typing-extensions = "^4.12.0"
+urllib3 = "^2.2.1"
+uvicorn = "^0.27.1"
+resend = "^2.2.0"
+aws-lambda-powertools = "^2.41.0"
+pydantic-settings = "^2.3.4"
+pgvector = "^0.3.2"
+pandas = "^2.2.2"
+langchain = "^0.2.11"
+langchain-openai = "^0.1.17"
+langchain-community = "^0.2.10"
+faiss-cpu = "^1.8.0.post1"
+tiktoken = "^0.7.0"
+pytest = "^8.3.2"
+debugpy = "^1.8.5"
+
+[tool.poetry.group.test.dependencies]
+pytest = "^8.0.2"
+pytest-mock = "^3.11.1"
+httpx = "^0.27.0"
+faker = "^25.2.0"
+docker = "^7.0.0"
+pytest-alembic = "^0.11.0"
+python-dateutil = "^2.9.0.post0"
+
+[tool.poetry.group.code-qa.dependencies]
+black = "^23.9.1"
+ruff = "^0.0.287"
+pre-commit = "^3.4.0"
+mypy = "^1.5.1"
+
+[tool.poetry.group.dev.dependencies]
+uvicorn = "^0.27.1"
+ipykernel = "^6.25.2"
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = ["-ra", "-q"]
+pythonpath = ["src"]
+testpaths = ["tests"]
+cache_dir = "~/.cache/pytest"
+
+[tool.black]
+include = '\.pyi?$'
+line-length = 88
+target-version = ["py311"]
+
+[tool.ruff]
+cache-dir = "~/.cache/ruff"
+select = [
+    "E", "F", "W", "B", "I", "ARG", "C4", "EM", "ICN", "ISC", "G", "PGH", "PIE", "PL", "PT", "PTH", "RET", "RUF", "SIM", "T20", "UP", "YTT", "EXE", "NPY", "PD"
+]
+ignore = ["PLR"]
+typing-modules = ["mypackage._compat.typing"]
+src = ["src"]
+unfixable = ["T20", "F841"]
+exclude = []
+flake8-unused-arguments.ignore-variadic-names = true
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.isort]
+force-sort-within-sections = true
+
+[tool.ruff.per-file-ignores]
+"tests/**" = ["T20"]
+"__init__.py" = ["F401"]
+
+[tool.mypy]
+files = "src"
+python_version = "3.11"
+ignore_missing_imports = true
+show_error_codes = true
+enable_error_code = ["ignore-without-code", "redundant-expr", "truthy-bool"]
+warn_unreachable = true
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -1,0 +1,70 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  SAM FastAPI Application
+
+Globals:
+  Api:
+    BinaryMediaTypes:
+      - "application/octet-stream"
+      - "image~1*"
+  Function:
+    Timeout: 60
+    MemorySize: 256
+    Runtime: python3.12
+
+Resources:
+  ChopApi:
+    Type: AWS::Serverless::Api
+    Description: "Serverless API for CRUD operations"
+    Properties:
+      Name: "chop-api"
+      StageName: "Prod"
+      Cors:
+        AllowMethods: "'POST,GET,PUT,DELETE,OPTIONS'"
+        AllowOrigin: "'*'"
+        AllowHeaders: "'*'"
+
+  HandlerFunction:
+    Type: AWS::Serverless::Function
+    Compression: 'Zip'
+    Properties:
+      Handler: app.main.handler
+      CodeUri: .
+      Description: Mangum Handler Function
+      Architectures:
+        - x86_64
+      Tracing: Active
+      Events:
+        RootPath:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ChopApi
+            Path: /{proxy+}  # Maneja todas las rutas y métodos
+            Method: ANY
+
+      Environment:
+        Variables:
+          POWERTOOLS_METRICS_NAMESPACE: Powertools
+          LOG_LEVEL: INFO
+          DEV_DATABASE_URL: postgresql+psycopg2://postgres.ztawfmqggnaangtskyao:chopfastapi123+@aws-0-us-east-1.pooler.supabase.com:5432/postgres
+          AUTH0_DOMAIN: chop-auth-api.us.auth0.com
+          AUTH0_CLIENT_ID: iY2ZMvIjSCdZkrnZ7xrczg8titMTc2SH
+          AUTH0_CLIENT_SECRET: lFWE1FX4pQ0uKZ9EGyHIvSMLerG7sEE9pYXHN5LcfdctTvRkiSke4TI_fJhVMr9p
+          AUTH0_AUDIENCE: https://api-prod-chop/
+          FRONT_HOST: https://www.chop.so
+          SECRET_KEY: SECRETKEY
+          OPENAI_API_KEY: sk-proj-byYE1KcR4XNDVDu0Rh7aT3BlbkFJRaswIBpqSxlkPbfqXuBz
+          RESEND: re_a4vuB7hm_AUSqzAnvQBPTzG9J7qfG1hPC
+          HELICONE_API_KEY: sk-helicone-apxa7ey-tilup7i-vpm5wny-sntojsi
+      Tags:
+        LambdaPowertools: python
+
+Outputs:
+  Api:
+    Description: "API Gateway endpoint URL for Prod environment for Mangum Handler Function"
+    Value: !Sub "https://${ChopApi}.execute-api.${AWS::Region}.amazonaws.com/Prod"
+
+  HandlerFunction:
+    Description: "Mangum Handler Function ARN"
+    Value: !GetAtt HandlerFunction.Arn

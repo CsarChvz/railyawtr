@@ -1,0 +1,46 @@
+networks:
+  dev-network:
+    driver: bridge
+
+services:
+  dev-db:
+    image: ankane/pgvector:latest
+    restart: always
+    env_file:
+      - app/.env
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./scripts:/docker-entrypoint-initdb.d
+      #- ./db-volume:/var/lib/postgresql/data
+    networks:
+      - dev-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - dev-network
+
+  # fastapi-lambda:
+  #   build: .
+  #   container_name: fastapi-lambda
+  #   environment:
+  #     DEV_DATABASE_URL: ${DEV_DATABASE_URL}
+  #     POSTGRES_USER: ${POSTGRES_USER}
+  #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+  #   ports:
+  #     - "8000:8000"
+  #   depends_on:
+  #     dev-db:
+  #       condition: service_healthy
+  #   networks:
+  #     - dev-network
+

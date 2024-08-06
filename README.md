@@ -317,4 +317,4 @@ This approach ensures secure access control, allowing only authenticated and aut
 
 1. **Login:** The user logs in and receives an `access_token` from Auth0.
 2. **Store Token:** The `access_token` is stored in the cookies with the name "session".
-3. **Validation:** Validators (`AuthenticationChecker` and `PermissionsValidator`) use this token# railyawtr
+3. **Validation:** Validators (`AuthenticationChecker` and `PermissionsValidator`) use this token
