@@ -84,17 +84,17 @@ The `/frontend` folder contains the Vue 3 frontend as a self-contained project c
    ```sh
    #!/bin/sh
 
-   export PGUSER='postgres'
+   export PGUSER="postgres"
 
-   psql -c 'CREATE DATABASE fastapi'
+   psql -c "CREATE DATABASE fastapi"
 
-   psql fastapi -c 'CREATE EXTENSION IF NOT EXISTS \'uuid-ossp\';'
+   psql fastapi -c "CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";"
    ```
 
    **Important Notes:**
    
    - Ensure the script has LF (Line Feed) line endings, not CRLF, as it will be executed in a PostgreSQL environment.
-   - To set the correct line endings in Visual Studio Code, make sure the file is in LF format (look for 'LF' or 'CRLF' in the bottom right corner of VS Code).
+   - To set the correct line endings in Visual Studio Code, make sure the file is in LF format (look for "LF" or "CRLF" in the bottom right corner of VS Code).
    - Grant execution permissions to the script with the following command:
 
      ```bash
@@ -136,7 +136,7 @@ The `/frontend` folder contains the Vue 3 frontend as a self-contained project c
 7. **Generate Migrations for an Empty Database:**
 
    ```bash
-   alembic -n devdb revision --autogenerate -m 'init'
+   alembic -n devdb revision --autogenerate -m "init"
    alembic -n devdb upgrade head
    ```
 
@@ -168,30 +168,30 @@ To run the application locally, you need to configure the environment variables.
 
    ```env
       # URLs de las bases de datos de desarrollo y prueba
-      DEV_DATABASE_URL=''
+      DEV_DATABASE_URL=""
       TEST_DATABASE_URL=postgresql+psycopg2://postgres:postgres@127.0.0.1:5434/fastapi
 
       # Credenciales de PostgreSQL (asegúrate de que coincidan con las configuradas en docker-compose.yml)
-      POSTGRES_USER='postgres'
-      POSTGRES_PASSWORD='postgres'
+      POSTGRES_USER="postgres"
+      POSTGRES_PASSWORD="postgres"
 
       # Configuración Auth0
-      AUTH0_DOMAIN=''
-      AUTH0_CLIENT_ID=''
-      AUTH0_CLIENT_SECRET=''
-      AUTH0_AUDIENCE=''
+      AUTH0_DOMAIN=""
+      AUTH0_CLIENT_ID=""
+      AUTH0_CLIENT_SECRET=""
+      AUTH0_AUDIENCE=""
 
       # Dirección del frontend
-      FRONT_HOST='http://localhost:3000/'
+      FRONT_HOST="http://localhost:3000/"
 
       # Clave secreta para la aplicación
-      SECRET_KEY='ASDFASDF'
+      SECRET_KEY="ASDFASDF"
 
       # Clave API de OpenAI
-      OPENAI_API_KEY=''
+      OPENAI_API_KEY=""
 
       # Variable para configurar el entorno de testing
-      TESTING='2'
+      TESTING="2"
    ```
 
 ## Python Dependency Management with Poetry
@@ -220,19 +220,19 @@ poetry export -f requirements.txt --only main --output requirements.txt --withou
 
 ## Using API in Swagger
 
-When using Swagger to interact with the API or make requests, you do not need to include the 'user_id' attribute in the request bodies. This attribute is used only for testing purposes. In actual API usage, the 'user_id' is automatically obtained from the authorization token (Bearer Token) that provides the ID of the authenticated user.
+When using Swagger to interact with the API or make requests, you do not need to include the "user_id" attribute in the request bodies. This attribute is used only for testing purposes. In actual API usage, the "user_id" is automatically obtained from the authorization token (Bearer Token) that provides the ID of the authenticated user.
 
 ### Configuring Bearer Token Authentication in Swagger
 
 1. **Access the Authorization Button:**
 
-   In the Swagger interface, find the 'Authorize' button at the top right corner of the page.
+   In the Swagger interface, find the "Authorize" button at the top right corner of the page.
 
    ![Swagger Authorization Button](./diagrams/swagger_authorize_button.png)
 
 2. **Enter the Bearer Token:**
 
-   Click on the 'Authorize' button to open a pop-up window. In this window, enter your Bearer Token in the provided field. Make sure to prefix your token with the word 'Bearer' followed by a space.
+   Click on the "Authorize" button to open a pop-up window. In this window, enter your Bearer Token in the provided field. Make sure to prefix your token with the word "Bearer" followed by a space.
 
    ```plaintext
    Bearer <your_access_token>
@@ -248,15 +248,15 @@ When using Swagger to interact with the API or make requests, you do not need to
 
 3. **Apply Authorization:**
 
-   Click the 'Authorize' button in the pop-up window to apply the authentication to your requests. After authorizing, you can close the pop-up and start making authenticated API requests.
+   Click the "Authorize" button in the pop-up window to apply the authentication to your requests. After authorizing, you can close the pop-up and start making authenticated API requests.
 
 ### Example
 
-When you make a request with Swagger, the request body does not need to include 'user_id'. Here’s how a correct request should look:
+When you make a request with Swagger, the request body does not need to include "user_id". Here’s how a correct request should look:
 
 ![Request without user_id](./diagrams/endpoint_without_user_id_body_example.png)
 
-In this case, the API extracts the 'user_id' from the Bearer Token you provided in the authorization step.
+In this case, the API extracts the "user_id" from the Bearer Token you provided in the authorization step.
 
 ## Authentication and Authorization
 
@@ -282,7 +282,7 @@ The Bearer Token is also used to verify the user’s permissions to access speci
 
   ```python
   @questions_router.get(
-      '/random-question',
+      "/random-question",
       response_model=QuestionResult,
       status_code=201,
       dependencies=[Depends(AuthenticationChecker())],
@@ -295,10 +295,10 @@ The Bearer Token is also used to verify the user’s permissions to access speci
 
   ```python
   @user_router.put(
-      '/{user_id}/admin',
+      "/{user_id}/admin",
       response_model=UserReturn,
       status_code=200,
-      dependencies=[Depends(PermissionsValidator(['crud:admin-update-user']))],
+      dependencies=[Depends(PermissionsValidator(["crud:admin-update-user"]))],
   )
   ```
 
@@ -316,5 +316,5 @@ This approach ensures secure access control, allowing only authenticated and aut
 ### How It Works
 
 1. **Login:** The user logs in and receives an `access_token` from Auth0.
-2. **Store Token:** The `access_token` is stored in the cookies with the name 'session'.
+2. **Store Token:** The `access_token` is stored in the cookies with the name "session".
 3. **Validation:** Validators (`AuthenticationChecker` and `PermissionsValidator`) use this token

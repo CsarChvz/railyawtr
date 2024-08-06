@@ -23,3 +23,27 @@ class DeckResponse(DeckBase):
 
     model_config = ConfigDict(arbitrary_types_allowed=True, from_attributes=True)
 
+
+class DeckCreateSchema(BaseModel):
+    user_id: str
+    prompt_id: int
+    name: Optional[str]
+    description: Optional[str]
+
+class DeckUpdateSchema(BaseModel):
+    name: Optional[str]
+    description: Optional[str]
+
+class DeckResult(DeckCreateSchema):
+    id: int
+    created_at: str
+    updated_at: str
+
+    model_config = ConfigDict(arbitrary_types_allowed=True, from_attributes=True)
+
+
+class QuestionResult(BaseModel):
+    id: int
+    text: str
+
+    model_config = ConfigDict(arbitrary_types_allowed=True, from_attributes=True)

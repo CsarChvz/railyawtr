@@ -27,8 +27,8 @@ def get_due_user_assignments_service(user_id: str, prompt_id: int, today: dateti
         return [UserAssignmentResult.from_orm(user_assignment) for user_assignment in user_assignments]
     except Exception as e:
         db.rollback()
-        logger.error(f'Unexpected error while retrieving user assignments for user {user_id} and prompt {prompt_id}: {e}')
-        raise HTTPException(status_code=500, detail='Internal server error')
+        logger.error(f"Unexpected error while retrieving user assignments for user {user_id} and prompt {prompt_id}: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 
 def questions_assigned_to_deck_service(deck_id: int, user_id: str, db: Session):
@@ -39,8 +39,8 @@ def questions_assigned_to_deck_service(deck_id: int, user_id: str, db: Session):
         return [UserAssignmentResult.model_validate(user_assignment) for user_assignment in user_assignments]
     except Exception as e:
         db.rollback()
-        logger.error(f'Unexpected error while retrieving user assignments for user {e}')
-        raise HTTPException(status_code=500, detail='Internal server error')
+        logger.error(f"Unexpected error while retrieving user assignments for user {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 def set_questions_assigned_to_deck_service(user_id:str, prompt_id: int, deck_id: int, questions: any, db: Session):
     try:
@@ -50,8 +50,8 @@ def set_questions_assigned_to_deck_service(user_id:str, prompt_id: int, deck_id:
         return user_assignments
     except Exception as e:
         db.rollback()
-        logger.error(f'Unexpected error while retrieving user assignments for user {e}')
-        raise HTTPException(status_code=500, detail='Internal server error')
+        logger.error(f"Unexpected error while retrieving user assignments for user {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 
 def get_first_assigned_question_service(user_id: str, deck_id: int, db: Session):
@@ -60,8 +60,8 @@ def get_first_assigned_question_service(user_id: str, deck_id: int, db: Session)
         return UserAssignmentResult.model_validate(first_assigned_question)
     except Exception as e:
         db.rollback()
-        logger.error(f'Unexpected error while creating feedback: {e}')
-        raise HTTPException(status_code=500, detail='Internal server error')
+        logger.error(f"Unexpected error while creating feedback: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 
 def get_user_question_assignment_service(question_assigned:int, db: Session):
@@ -73,8 +73,8 @@ def get_user_question_assignment_service(question_assigned:int, db: Session):
         return assigned_question_user
     except Exception as e:
         db.rollback()
-        logger.error(f'Unexpected error while creating feedback: {e}')
-        raise HTTPException(status_code=500, detail='Internal server error')
+        logger.error(f"Unexpected error while creating feedback: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
     
 
 def get_all_question_assignments_service(deck_id: int, db: Session):
@@ -98,13 +98,13 @@ import random
 
 
 def schedule_review(assignment: UserAssignment, is_correct: bool, question_difficulty: int):
-    '''
+    """
     Programa la próxima revisión de una asignación basada en la corrección de la respuesta del usuario.
     
     :param assignment: La asignación de usuario a actualizar.
     :param is_correct: Indica si la respuesta fue correcta o no.
     :param question_difficulty: La dificultad fija de la pregunta (de 1 a 5).
-    '''
+    """
     assignment.review_count += 1
 
     # Ajuste de intervalo y ease_factor basado en la corrección de la respuesta
@@ -135,14 +135,14 @@ def schedule_review(assignment: UserAssignment, is_correct: bool, question_diffi
 
 
 def calculate_user_level(user_id: str, deck_id: int, db: Session):
-    '''
+    """
     Calcula el nivel de conocimiento del usuario para un deck específico.
     
     :param user_id: ID del usuario
     :param deck_id: ID del deck
     :param db: Sesión de la base de datos
     :return: Un valor flotante representando el nivel del usuario (entre 0 y 1)
-    '''
+    """
     assignments = db.query(UserAssignment).filter(
         UserAssignment.user_id == user_id,
         UserAssignment.deck_id == deck_id

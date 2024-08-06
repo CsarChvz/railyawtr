@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
 @notification_router.post(
-    '/',
+    "/",
     response_model=NotificationResponseSchema,
     status_code=201,
 )
@@ -35,11 +35,11 @@ def create_notification(
         raise he
     except Exception as e:
         db.rollback()
-        logger.error(f'Unexpected error while creating notification: {e}')
-        raise HTTPException(status_code=500, detail='Internal server error')
+        logger.error(f"Unexpected error while creating notification: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 @notification_router.get(
-    '/',
+    "/",
     response_model=List[NotificationResponseSchema],
 )
 def get_notifications(
@@ -51,11 +51,11 @@ def get_notifications(
     except HTTPException as he:
         raise he
     except Exception as e:
-        logger.error(f'Unexpected error while retrieving notifications: {e}')
-        raise HTTPException(status_code=500, detail='Internal server error')
+        logger.error(f"Unexpected error while retrieving notifications: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 @notification_router.get(
-    '/{notification_id}',
+    "/{notification_id}",
     response_model=NotificationResponseSchema,
 )
 def get_notification_by_id(
@@ -67,11 +67,11 @@ def get_notification_by_id(
     except HTTPException as he:
         raise he
     except Exception as e:
-        logger.error(f'Unexpected error while retrieving notification {notification_id}: {e}')
-        raise HTTPException(status_code=500, detail='Internal server error')
+        logger.error(f"Unexpected error while retrieving notification {notification_id}: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 @notification_router.put(
-    '/{notification_id}',
+    "/{notification_id}",
     response_model=NotificationResponseSchema,
 )
 def update_notification(
@@ -85,11 +85,11 @@ def update_notification(
         raise he
     except Exception as e:
         db.rollback()
-        logger.error(f'Unexpected error while updating notification: {e}')
-        raise HTTPException(status_code=500, detail='Internal server error')
+        logger.error(f"Unexpected error while updating notification: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 @notification_router.delete(
-    '/{notification_id}',
+    "/{notification_id}",
     response_model=NotificationResponseSchema,
 )
 def delete_notification(
@@ -102,5 +102,5 @@ def delete_notification(
         raise he
     except Exception as e:
         db.rollback()
-        logger.error(f'Unexpected error while deleting notification: {e}')
-        raise HTTPException(status_code=500, detail='Internal server error')
+        logger.error(f"Unexpected error while deleting notification: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")

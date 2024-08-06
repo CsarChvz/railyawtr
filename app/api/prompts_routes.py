@@ -36,7 +36,7 @@ class TrendingPromptSchema(BaseModel):
     frequency: int
 
 
-@prompts_router.get('/embed')
+@prompts_router.get("/embed")
 def get_simiar( 
     text: str = Query(...),
     db: Session = Depends(get_db_session)
@@ -50,13 +50,13 @@ def get_simiar(
         print(score)
     return  [PromptResult.model_validate(prompt) for prompt, score in prompts]
 
-@prompts_router.get('/trending', response_model=List[TrendingPromptSchema])
+@prompts_router.get("/trending", response_model=List[TrendingPromptSchema])
 def get_trending_prompts(db: Session = Depends(get_db_session)):
     try:
         prompts = get_all_prompts_service(db)
         
         if not prompts:
-            raise HTTPException(status_code=404, detail='No prompts found')
+            raise HTTPException(status_code=404, detail="No prompts found")
         
         prompt_texts = [prompt.text for prompt in prompts]
 
@@ -65,7 +65,7 @@ def get_trending_prompts(db: Session = Depends(get_db_session)):
         most_common_prompts = prompt_counter.most_common(10)
 
         response = [
-            {'text': prompt, 'frequency': frequency}
+            {"text": prompt, "frequency": frequency}
             for prompt, frequency in most_common_prompts
         ]
 
@@ -74,12 +74,12 @@ def get_trending_prompts(db: Session = Depends(get_db_session)):
     except HTTPException as he:
         raise he
     except Exception as e:
-        logger.error(f'Unexpected error while retrieving trending prompts: {e}')
-        raise HTTPException(status_code=500, detail='Internal server error')
+        logger.error(f"Unexpected error while retrieving trending prompts: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
     
 
 @prompts_router.post(
-    '', response_model=PromptResult
+    "", response_model=PromptResult
 )
 def create_prompt(
     prompt_data: PromptBase,
@@ -89,11 +89,11 @@ def create_prompt(
     try:
         if not prompt_data.text:
             raise HTTPException(
-                status_code=506, detail='Missing required fields: text'
+                status_code=506, detail="Missing required fields: text"
             )
 
         # Verificar si estamos en un entorno de pruebas
-        if os.getenv('TESTING') == '1':
+        if os.getenv("TESTING") == "1":
             current_user_id = prompt_data.user_id
         else:
             current_user_id = user_id
@@ -105,11 +105,11 @@ def create_prompt(
         raise he
     except Exception as e:
         db.rollback()
-        logger.error(f'Unexpected error while creating prompt: {e}')
-        raise HTTPException(status_code=500, detail='Internal server error')
+        logger.error(f"Unexpected error while creating prompt: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 @prompts_router.get(
-    '/user/{user_id}',
+    "/user/{user_id}",
     response_model=list[PromptResult],
 )
 def get_user_prompts(user_id: str, db: Session = Depends(get_db_session)):
@@ -121,12 +121,12 @@ def get_user_prompts(user_id: str, db: Session = Depends(get_db_session)):
     except Exception as e:
         db.rollback()
         logger.error(
-            f'Unexpected error while retrieving prompts for user {user_id}: {e}'
+            f"Unexpected error while retrieving prompts for user {user_id}: {e}"
         )
-        raise HTTPException(status_code=500, detail='Internal server error')
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 @prompts_router.get(
-    '/history',
+    "/history",
     response_model=list[PromptResult],
 )
 def get_user_prompts(user_id: str = Query(...), db: Session = Depends(get_db_session)):
@@ -138,13 +138,13 @@ def get_user_prompts(user_id: str = Query(...), db: Session = Depends(get_db_ses
     except Exception as e:
         db.rollback()
         logger.error(
-            f'Unexpected error while retrieving prompts for user {user_id}: {e}'
+            f"Unexpected error while retrieving prompts for user {user_id}: {e}"
         )
-        raise HTTPException(status_code=500, detail='Internal server error')
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 
 @prompts_router.get(
-    '/{prompt_id}',
+    "/{prompt_id}",
     response_model=PromptIndividual,
 )
 def get_user_prompts(prompt_id: int, db: Session = Depends(get_db_session)):
@@ -156,12 +156,12 @@ def get_user_prompts(prompt_id: int, db: Session = Depends(get_db_session)):
     except Exception as e:
         db.rollback()
         logger.error(
-            f'Unexpected error while retrieving prompt {prompt_id}: {e}'
+            f"Unexpected error while retrieving prompt {prompt_id}: {e}"
         )
-        raise HTTPException(status_code=500, detail='Internal server error')
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 @prompts_router.put(
-    '/{prompt_id}',
+    "/{prompt_id}",
     response_model=PromptResult,
     status_code=201,
 )
@@ -176,11 +176,11 @@ def update_prompt(
         db.rollback()
         raise he
     except Exception as e:
-        logger.error(f'Unexpected error while updating user: {e}')
-        raise HTTPException(status_code=500, detail='Internal server error')
+        logger.error(f"Unexpected error while updating user: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 @prompts_router.delete(
-    '/{prompt_id}',
+    "/{prompt_id}",
     response_model=PromptResult,
     status_code=201,
 )
@@ -194,16 +194,16 @@ def delete_prompt(
         db.rollback()
         raise he
     except Exception as e:
-        logger.error(f'Unexpected error while updating user: {e}')
-        raise HTTPException(status_code=500, detail='Internal server error')
+        logger.error(f"Unexpected error while updating user: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 
-@prompts_router.post('/embed')
+@prompts_router.post("/embed")
 def post_emmbede( 
     prompt_data: PromptBase,
     db: Session = Depends(get_db_session)
 ):
     result = generate_embeddings(prompt_data.text)
-    prompt = create_prompt_emb(text=prompt_data.text, user_id='google-oauth2|116218682452035897380', embedding=result, db=db)
+    prompt = create_prompt_emb(text=prompt_data.text, user_id="google-oauth2|116218682452035897380", embedding=result, db=db)
     return PromptResult.model_validate(prompt) 
 

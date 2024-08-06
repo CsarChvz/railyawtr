@@ -85,5 +85,10 @@ from .user_assignments_repository import (
 from .deck_repository import (
     get_deck_by_prompt,
     create_deck,
-    get_deck
+    get_deck,
+    delete_deck,
+    get_decks_by_user_id,
+    get_questions_by_deck_id,
+    update_deck
 )
+

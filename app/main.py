@@ -28,9 +28,9 @@ from app.utils.logger import logger
 
 load_dotenv()
 
-SECRET_KEY = os.getenv('SECRET_KEY', 'default_secret_key')
-FRONT_HOST = os.getenv('FRONT_HOST')
-print('SECRETSEC_KEY')
+SECRET_KEY = os.getenv("SECRET_KEY", "default_secret_key")
+FRONT_HOST = os.getenv("FRONT_HOST")
+print("SECRETSEC_KEY")
 
 print(SECRET_KEY)
 origins = [
@@ -42,24 +42,43 @@ app = FastAPI(
     title=get_settings().app_name,
     version=get_settings().version,
     summary=summary,
-    description='',
+    description="",
     openapi_tags=tags_metadata,
     license_info=license,
     redirect_slashes=False
 )
-app.include_router(api_router, prefix='/api/v1')
+app.include_router(api_router, prefix="/api/v1")
 
 origins = [
    FRONT_HOST, 
-    'http://localhost:3000' # Reemplaza con tu origen específico
+    "http://localhost:3000" # Reemplaza con tu origen específico
 ]
 
 # Configura CORS Middleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=['*'],  # Permitir todos los métodos HTTP
-    allow_headers=['*'],  # Permitir los encabezados necesarios
-    expose_headers=['*'],  # Exponer encabezados específicos
+    allow_credentials=False,
+    allow_methods=["*"],  # Permitir todos los métodos HTTP
+    allow_headers=["*"],  # Permitir los encabezados necesarios
+    expose_headers=["*"],  # Exponer encabezados específicos
 )
+
+
+@logger.inject_lambda_context(correlation_id_path=correlation_paths.API_GATEWAY_REST)
+# @tracer.capture_lambda_handler
+# @metrics.log_metrics(capture_cold_start_metric=True)
+def handler(event: dict, context: LambdaContext) -> Any:
+    asgi_handler = Mangum(app)
+
+    return asgi_handler(event, context)
+
+
+if __name__ == "__main__":
+    import os
+
+    import uvicorn
+
+    os.environ["AWS_SAM_LOCAL"] = "TRUE"
+    os.environ["LOG_LEVEL"] = "DEBUG"
+    uvicorn.run(app, host="0.0.0.0", port=8000)

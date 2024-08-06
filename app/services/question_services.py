@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 def get_random_question_service(db: Session):
     questions = question_repository.get_all_questions(db)
     if not questions:
-        raise HTTPException(status_code=404, detail='No questions available')
+        raise HTTPException(status_code=404, detail="No questions available")
     return random.choice(questions)
 
 
@@ -33,7 +33,7 @@ def get_questions_from_a_prompt_service(prompt_id: str, db: Session):
 def create_question_from_a_prompt_service(prompt_id: str, user_id: str, prompt_settings: str, lang: str, db: Session):
     user_input = question_repository.check_prompt_exists(prompt_id, db)
     if not user_input:
-        raise HTTPException(status_code=404, detail='Prompt not found')
+        raise HTTPException(status_code=404, detail="Prompt not found")
     question_text = generate_question(prompt=prompt_settings,user_input=user_input.text, lang=lang)
     question = question_repository.create_question(prompt_id, user_id, question_text, db)
     return question
@@ -43,14 +43,14 @@ def create_question_from_a_prompt_service(prompt_id: str, user_id: str, prompt_s
 def get_question_service(question_id: int, db: Session):
     question = question_repository.get_question_by_id(question_id, db)
     if not question:
-        raise HTTPException(status_code=404, detail='Question not found')
+        raise HTTPException(status_code=404, detail="Question not found")
     return question
 
 
 def update_question_service(question_id: int, question_data: QuestionBase, db: Session):
     question = question_repository.get_question_by_id(question_id, db)
     if not question:
-        raise HTTPException(status_code=404, detail='Question not found')
+        raise HTTPException(status_code=404, detail="Question not found")
     return question_repository.update_question(
         question, question_data.model_dump(exclude_unset=True), db
     )
@@ -59,7 +59,7 @@ def update_question_service(question_id: int, question_data: QuestionBase, db: S
 def delete_question_service(question_id: int, db: Session):
     question = question_repository.get_question_by_id(question_id, db)
     if not question:
-        raise HTTPException(status_code=404, detail='Question not found')
+        raise HTTPException(status_code=404, detail="Question not found")
     return question_repository.delete_question(question, db)
 
 def find_similar_questions(db: Session, prompt: str, limit: int = 5):
@@ -75,6 +75,6 @@ def get_existing_questions(db: Session, prompt_id: int) -> List[Question]:
     return db.query(Question).filter(Question.prompt_id == prompt_id).all()
 
 
-def generate_and_save_new_questions_services(topic: str, prompt_id: int, db: Session):
+def generate_and_save_new_questions_services(topic: str, prompt_id: int, lang: str,db: Session):
 
-    return generate_and_save_new_questions(topic=topic, prompt_id=prompt_id, db=db)
+    return generate_and_save_new_questions(topic=topic, prompt_id=prompt_id, lang=lang, db=db)

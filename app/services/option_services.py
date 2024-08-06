@@ -20,7 +20,7 @@ def get_options_for_question_service(question_id: int, db: Session):
     except Exception as e:
         db.rollback()
         logger.error(
-            f'Unexpected error while retrieving options for question {question_id}: {e}'
+            f"Unexpected error while retrieving options for question {question_id}: {e}"
         )
         raise
 
@@ -36,7 +36,7 @@ def create_option_for_question_service(question_id: int, db: Session):
     question = get_question_by_id(question_id, db)
     options_texts = generate_response_options(question.question_text)
     new_options = []
-    lineas = options_texts.split('\n')
+    lineas = options_texts.split("\n")
 
     resultado = []
 
@@ -59,7 +59,7 @@ def create_option_for_question_service(question_id: int, db: Session):
 def update_option_service(option_id: str, option_data, db: Session):
     option = option_repository.get_option_by_id(option_id, db)
     if not option:
-        raise HTTPException(status_code=404, detail='Option not found')
+        raise HTTPException(status_code=404, detail="Option not found")
     return OptionResult.from_orm(
         option_repository.update_option(option, option_data, db)
     )
@@ -68,23 +68,23 @@ def update_option_service(option_id: str, option_data, db: Session):
 def delete_option_service(option_id: str, db: Session):
     option = option_repository.get_option_by_id(option_id, db)
     if not option:
-        raise HTTPException(status_code=404, detail='Option not found')
+        raise HTTPException(status_code=404, detail="Option not found")
     return OptionResult.from_orm(option_repository.delete_option(option, db))
 
 def update_is_selected_service(option_id: int, update_data: UpdateIsSelectedSchema, db: Session):
     try:
         option = option_repository.update_is_selected(option_id, update_data.is_selected, db)
         if not option:
-            raise HTTPException(status_code=404, detail='Option not found')
+            raise HTTPException(status_code=404, detail="Option not found")
         return OptionResult.from_orm(option)
     except Exception as e:
         db.rollback()
-        logger.error(f'Unexpected error while updating is_selected for option {option_id}: {e}')
-        raise HTTPException(status_code=500, detail='Internal server error')
+        logger.error(f"Unexpected error while updating is_selected for option {option_id}: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
     
 
 def get_correct_option_service(question_id: str, db: Session):
     option = option_repository.get_correct_option(question_id, db)
     if not option:
-        raise HTTPException(status_code=404, detail='Option not found')
+        raise HTTPException(status_code=404, detail="Option not found")
     return OptionResult.model_validate(option)

@@ -12,6 +12,6 @@ class InvestorInterestCreate(InvestorInterestBase):
 class InvestorInterestResponse(InvestorInterestBase):
     id: int
     user_id: str
-    created_at: datetime = Field(..., description='Timestamp of the notification creation')
+    created_at: datetime = Field(..., description="Timestamp of the notification creation")
 
     model_config = ConfigDict(arbitrary_types_allowed=True, from_attributes=True)

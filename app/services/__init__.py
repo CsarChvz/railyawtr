@@ -95,6 +95,10 @@ from .user_assignments_service import (
 from .deck_service import (
     get_deck_by_prompt_service,
     create_deck_service,
-    get_deck_service
+    get_deck_service,
+    delete_deck_service,
+    update_deck_service,
+    get_decks_by_user_service,
+    get_questions_by_deck_service
 )
 load_dotenv()

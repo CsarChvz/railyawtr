@@ -38,4 +38,4 @@ from .investor import InvestorInterestBase, InvestorInterestCreate, InvestorInte
 
 from .user_assignment import UserAssignmentResult
 
-from .deck import DeckBase, DeckCreate, DeckResponse, DeckUpdate
+from .deck import DeckBase, DeckCreate, DeckResponse, DeckUpdate, DeckResult, DeckCreateSchema, DeckUpdateSchema

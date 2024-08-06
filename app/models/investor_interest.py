@@ -4,7 +4,7 @@ import sqlalchemy
 from ..db.database import Base
 
 class InvestorInterest(Base):
-    __tablename__ = 'investor_interest'
+    __tablename__ = "investor_interest"
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(String, ForeignKey('users.id'), nullable=False)
@@ -12,7 +12,7 @@ class InvestorInterest(Base):
     reason = Column(String, nullable=True)
     created_at = Column(
         DateTime,
-        server_default=text('CURRENT_TIMESTAMP'),
+        server_default=text("CURRENT_TIMESTAMP"),
     )
     
-    user = relationship('User', back_populates='investor_interests')
+    user = relationship("User", back_populates="investor_interests")

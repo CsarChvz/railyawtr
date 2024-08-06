@@ -6,28 +6,28 @@ from datetime import datetime
 from app.models import User
 from app.schemas import UserCreate, UserUpdate, UserAuth0Base
 
-AUTH0_DOMAIN = 'fast-api-ex.us.auth0.com'
-CLIENT_ID = 'ybWKSHrlZRJbxKjmRV22734f8EbBh1Wr'
-CLIENT_SECRET = 'NHilJIt9g1TTGLV2AUDgY60prhvGgUO3o9ZBfsESamtX4fSwZWEh628fM0gdCx1b'
-AUDIENCE = 'https://fastapi.example.com'
+AUTH0_DOMAIN = "fast-api-ex.us.auth0.com"
+CLIENT_ID = "ybWKSHrlZRJbxKjmRV22734f8EbBh1Wr"
+CLIENT_SECRET = "NHilJIt9g1TTGLV2AUDgY60prhvGgUO3o9ZBfsESamtX4fSwZWEh628fM0gdCx1b"
+AUDIENCE = "https://fastapi.example.com"
 SECRET_KEY = CLIENT_SECRET
-ALGORITHMS = ['RS256']
+ALGORITHMS = ["RS256"]
 
 
 async def signup(email: str, password: str, username: str):
-    url = f'https://{AUTH0_DOMAIN}/dbconnections/signup'
+    url = f"https://{AUTH0_DOMAIN}/dbconnections/signup"
     data = {
-        'client_id': CLIENT_ID,
-        'email': email,
-        'password': password,
-        'connection': 'Username-Password-Authentication',
-        'username': username,
-        'given_name': 'John',
-        'family_name': 'Doe',
-        'name': 'John Doe',
-        'nickname': 'johnny',
-        'picture': 'http://example.org/jdoe.png',
-        'user_metadata': {'plan': 'silver', 'team_id': 'a111'},
+        "client_id": CLIENT_ID,
+        "email": email,
+        "password": password,
+        "connection": "Username-Password-Authentication",
+        "username": username,
+        "given_name": "John",
+        "family_name": "Doe",
+        "name": "John Doe",
+        "nickname": "johnny",
+        "picture": "http://example.org/jdoe.png",
+        "user_metadata": {"plan": "silver", "team_id": "a111"},
     }
 
     async with httpx.AsyncClient() as client:

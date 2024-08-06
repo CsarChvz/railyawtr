@@ -16,12 +16,12 @@ from tests.factories.models_factory import (
 
 # Configura el logger
 logging.basicConfig(
-    level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
-prefix = '/api/v1'
+prefix = "/api/v1"
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope="function")
 def test_user(db_session: Session):
     user_data = get_random_user_dict()
     user = User(**user_data)
@@ -34,7 +34,7 @@ def test_user(db_session: Session):
     db_session.commit()
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope="function")
 def test_prompt(db_session: Session, test_user: User):
     prompt_data = get_random_prompt_dict(user_id=test_user.id)
     prompt = Prompt(**prompt_data)
@@ -47,7 +47,7 @@ def test_prompt(db_session: Session, test_user: User):
     db_session.commit()
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope="function")
 def test_question(db_session: Session, test_prompt: Prompt, test_user: User):
     question_data = get_random_question_dict(
         prompt_id=test_prompt.id, user_id=test_user.id
@@ -61,7 +61,7 @@ def test_question(db_session: Session, test_prompt: Prompt, test_user: User):
     db_session.commit()
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope="function")
 def test_option(db_session: Session, test_question: Question):
     option_data = get_random_option_dict(question_id=test_question.id)
     option = Option(**option_data)
@@ -73,7 +73,7 @@ def test_option(db_session: Session, test_question: Question):
     db_session.commit()
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope="function")
 def test_user_response(
     db_session: Session, test_question: Question, test_user: User, test_option: Option
 ):
@@ -91,20 +91,20 @@ def test_user_response(
     db_session.commit()
 
 
-@pytest.fixture(scope='function', autouse=True)
+@pytest.fixture(scope="function", autouse=True)
 def set_test_env():
-    os.environ['TESTING'] = '1'
+    os.environ["TESTING"] = "1"
     yield
-    os.environ.pop('TESTING', None)
+    os.environ.pop("TESTING", None)
 
 
 def mock_output(return_value=None):
     return lambda *args, **kwargs: return_value
 
 
-'''
+"""
 - [X] Test CREATE user response successfully
-'''
+"""
 
 def test_unit_create_user_response_successfully(
     client: TestClient,
@@ -124,31 +124,31 @@ def test_unit_create_user_response_successfully(
         monkeypatch.setattr(UserResponse, key, value)
 
     monkeypatch.setattr(
-        'sqlalchemy.orm.Query.first', mock_output(user_response_instance)
+        "sqlalchemy.orm.Query.first", mock_output(user_response_instance)
     )
-    monkeypatch.setattr('sqlalchemy.orm.Session.commit', mock_output())
-    monkeypatch.setattr('sqlalchemy.orm.Session.refresh', mock_output())
+    monkeypatch.setattr("sqlalchemy.orm.Session.commit", mock_output())
+    monkeypatch.setattr("sqlalchemy.orm.Session.refresh", mock_output())
     body = user_response_data.copy()
 
-    body.pop('id')
-    body.pop('created_at')
+    body.pop("id")
+    body.pop("created_at")
     response = client.post(
-        f'{prefix}/responses/question/{test_question.id}/response', json=body
+        f"{prefix}/responses/question/{test_question.id}/response", json=body
     )
     assert response.status_code == 201
 
     response_json = response.json()
-    assert response_json['id'] is not None
-    assert response_json['question_id'] == user_response_instance.question_id
-    assert response_json['user_id'] == user_response_instance.user_id
+    assert response_json["id"] is not None
+    assert response_json["question_id"] == user_response_instance.question_id
+    assert response_json["user_id"] == user_response_instance.user_id
     assert (
-        response_json['selected_option_id'] == user_response_instance.selected_option_id
+        response_json["selected_option_id"] == user_response_instance.selected_option_id
     )
 
 
-'''
+"""
 - [X] Test CREATE user response internal server error
-'''
+"""
 def test_unit_delete_category_internal_error(
     client: TestClient,
     test_question: Question,
@@ -163,23 +163,23 @@ def test_unit_delete_category_internal_error(
     )
 
     def mock_create_category_exception(*args, **kwargs):
-        raise Exception('Internal server error')
+        raise Exception("Internal server error")
 
-    monkeypatch.setattr('sqlalchemy.orm.Query.first', mock_create_category_exception)
+    monkeypatch.setattr("sqlalchemy.orm.Query.first", mock_create_category_exception)
     body = user_response_data.copy()
 
-    body.pop('id')
-    body.pop('created_at')
+    body.pop("id")
+    body.pop("created_at")
     response = client.post(
-        f'{prefix}/responses/question/{test_question.id}/response', json=body
+        f"{prefix}/responses/question/{test_question.id}/response", json=body
     )
     assert response.status_code == 500
-    assert response.json() == {'detail': 'Internal server error'}
+    assert response.json() == {"detail": "Internal server error"}
 
 
-'''
+"""
 - [X] Test GET responses for question successfully
-'''
+"""
 
 
 def test_unit_get_responses_for_question_successfully(
@@ -189,75 +189,75 @@ def test_unit_get_responses_for_question_successfully(
     monkeypatch,
 ):
     monkeypatch.setattr(
-        'sqlalchemy.orm.Query.filter_by', mock_output([test_user_response])
+        "sqlalchemy.orm.Query.filter_by", mock_output([test_user_response])
     )
-    monkeypatch.setattr('sqlalchemy.orm.Query.all', mock_output([test_user_response]))
+    monkeypatch.setattr("sqlalchemy.orm.Query.all", mock_output([test_user_response]))
 
-    response = client.get(f'{prefix}/responses/question/{test_question.id}/responses')
+    response = client.get(f"{prefix}/responses/question/{test_question.id}/responses")
     assert response.status_code == 200
 
     response_json = response.json()
     assert len(response_json) == 1
-    assert response_json[0]['id'] == test_user_response.id
-    assert response_json[0]['question_id'] == test_user_response.question_id
-    assert response_json[0]['user_id'] == test_user_response.user_id
+    assert response_json[0]["id"] == test_user_response.id
+    assert response_json[0]["question_id"] == test_user_response.question_id
+    assert response_json[0]["user_id"] == test_user_response.user_id
     assert (
-        response_json[0]['selected_option_id'] == test_user_response.selected_option_id
+        response_json[0]["selected_option_id"] == test_user_response.selected_option_id
     )
 
 
-'''
+"""
 - [X] Test GET responses for question not found
-'''
+"""
 
 
 def test_unit_get_responses_for_question_not_found(client: TestClient, monkeypatch):
-    monkeypatch.setattr('sqlalchemy.orm.Query.filter_by', mock_output([]))
-    monkeypatch.setattr('sqlalchemy.orm.Query.all', mock_output([]))
+    monkeypatch.setattr("sqlalchemy.orm.Query.filter_by", mock_output([]))
+    monkeypatch.setattr("sqlalchemy.orm.Query.all", mock_output([]))
 
-    response = client.get(f'{prefix}/responses/question/1/responses')
+    response = client.get(f"{prefix}/responses/question/1/responses")
     assert response.status_code == 200
     assert response.json() == []
 
 
-'''
+"""
 - [X] Test GET responses for question internal server error
-'''
+"""
 
 
 def test_unit_get_responses_for_question_internal_error(
     client: TestClient, monkeypatch
 ):
     def mock_get_responses_exception(*args, **kwargs):
-        raise Exception('Internal server error')
+        raise Exception("Internal server error")
 
-    monkeypatch.setattr('sqlalchemy.orm.Query.filter_by', mock_get_responses_exception)
-    monkeypatch.setattr('sqlalchemy.orm.Query.all', mock_get_responses_exception)
+    monkeypatch.setattr("sqlalchemy.orm.Query.filter_by", mock_get_responses_exception)
+    monkeypatch.setattr("sqlalchemy.orm.Query.all", mock_get_responses_exception)
 
-    response = client.get(f'{prefix}/responses/question/1/responses')
+    response = client.get(f"{prefix}/responses/question/1/responses")
     assert response.status_code == 500
-    assert response.json() == {'detail': 'Internal server error'}
+    assert response.json() == {"detail": "Internal server error"}
 
 
-'''
+"""
 - [X] Test DELETE user response successfully
-'''
+"""
 
 
 def test_unit_delete_user_response_successfully(
     client: TestClient, test_user_response: UserResponse, monkeypatch
 ):
-    monkeypatch.setattr('sqlalchemy.orm.Query.first', mock_output(test_user_response))
-    monkeypatch.setattr('sqlalchemy.orm.Session.delete', mock_output())
-    monkeypatch.setattr('sqlalchemy.orm.Session.commit', mock_output())
+    monkeypatch.setattr("sqlalchemy.orm.Query.first", mock_output(test_user_response))
+    monkeypatch.setattr("sqlalchemy.orm.Session.delete", mock_output())
+    monkeypatch.setattr("sqlalchemy.orm.Session.commit", mock_output())
 
-    response = client.delete(f'{prefix}/responses/response/{test_user_response.id}')
+    response = client.delete(f"{prefix}/responses/response/{test_user_response.id}")
     assert response.status_code == 200
 
 
-'''
+"""
 - [X] Test DELETE user response not found
-'''
+"""
 
 
 def test_unit_delete_user_response_not_found(
@@ -265,30 +265,30 @@ def test_unit_delete_user_response_not_found(
 ):
     user_response = []
     user_response_data = get_random_user_response_dict(
-        question_id=test_question.id, user_id='USR1', selected_option_id=1
+        question_id=test_question.id, user_id="USR1", selected_option_id=1
     )
     user_response_instance = UserResponse(**user_response_data)
-    monkeypatch.setattr('sqlalchemy.orm.Query.first', mock_output(user_response))
-    monkeypatch.setattr('sqlalchemy.orm.Session.commit', mock_output())
-    response = client.delete(f'{prefix}/responses/response/{user_response_instance.id}')
+    monkeypatch.setattr("sqlalchemy.orm.Query.first", mock_output(user_response))
+    monkeypatch.setattr("sqlalchemy.orm.Session.commit", mock_output())
+    response = client.delete(f"{prefix}/responses/response/{user_response_instance.id}")
     assert response.status_code == 404
-    assert response.json() == {'detail': 'User response not found'}
+    assert response.json() == {"detail": "User response not found"}
 
 
-'''
+"""
 - [X] Test DELETE user response internal server error
-'''
+"""
 
 
 def test_unit_delete_user_response_internal_error(
     client: TestClient, test_user_response: UserResponse, monkeypatch
 ):
     def mock_delete_user_response_exception(*args, **kwargs):
-        raise Exception('Internal server error')
+        raise Exception("Internal server error")
 
     monkeypatch.setattr(
-        'sqlalchemy.orm.Query.first', mock_delete_user_response_exception
+        "sqlalchemy.orm.Query.first", mock_delete_user_response_exception
     )
-    response = client.delete(f'{prefix}/responses/response/{test_user_response.id}')
+    response = client.delete(f"{prefix}/responses/response/{test_user_response.id}")
     assert response.status_code == 500
-    assert response.json() == {'detail': 'Internal server error'}
+    assert response.json() == {"detail": "Internal server error"}

@@ -14,10 +14,10 @@ from app.services import (
 email_router = APIRouter()
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
-SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 
-@email_router.post('/send-email/')
+@email_router.post("/send-email/")
 def send_email(to: str, subject: str, html_content: str, secret_key: str = Query(...)):
     if(secret_key == SECRET_KEY):
         try:
@@ -25,9 +25,9 @@ def send_email(to: str, subject: str, html_content: str, secret_key: str = Query
         except HTTPException as he:
             raise he
         except Exception as e:
-            logger.error(f'Unexpected error while creating user: {e}')
-            raise HTTPException(status_code=500, detail='Internal server error')
+            logger.error(f"Unexpected error while creating user: {e}")
+            raise HTTPException(status_code=500, detail="Internal server error")
     
     else:
-        raise HTTPException(status_code=400, detail='Unaturoized')
+        raise HTTPException(status_code=400, detail="Unaturoized")
 

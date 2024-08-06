@@ -19,12 +19,12 @@ class Deck(Base):
     prompt_id = Column(Integer, ForeignKey('prompts.id'), nullable=False)
     name = Column(String)
     description = Column(String, nullable=True)
-    created_at = Column(DateTime, server_default=text('CURRENT_TIMESTAMP'))
-    updated_at = Column(DateTime, server_default=text('CURRENT_TIMESTAMP'), onupdate=sqlalchemy.func.now())
+    created_at = Column(DateTime, server_default=text("CURRENT_TIMESTAMP"))
+    updated_at = Column(DateTime, server_default=text("CURRENT_TIMESTAMP"), onupdate=sqlalchemy.func.now())
 
-    user = relationship('User', back_populates='decks')
-    prompt = relationship('Prompt', back_populates='decks')
-    user_assignments = relationship('UserAssignment', back_populates='deck')
+    user = relationship("User", back_populates="decks")
+    prompt = relationship("Prompt", back_populates="decks")
+    user_assignments = relationship("UserAssignment", back_populates="deck")
 
     __table_args__ = (
         Index('idx_deck_user_id', 'user_id'),

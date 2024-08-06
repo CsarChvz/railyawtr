@@ -2,93 +2,93 @@ version: '3'
 
 tasks:
   run:
-    desc: 'Run the FastAPI application with uvicorn'
+    desc: "Run the FastAPI application with uvicorn"
     cmds:
       - uvicorn app.main:app --reload
 
   navigate_src:
-    desc: 'Navigate to the src directory'
+    desc: "Navigate to the src directory"
     cmds:
       - cd src
 
   setup_db:
-    desc: 'Set up the database using Docker Compose'
+    desc: "Set up the database using Docker Compose"
     cmds:
       - chmod +x ./src/scripts/db-setup.sh
       - docker-compose up -d
 
   setup_pyenv:
-    desc: 'Set up Python version using pyenv'
+    desc: "Set up Python version using pyenv"
     cmds:
       - pyenv install -s 3.12.0
       - pyenv local 3.12.0
 
   create_venv:
-    desc: 'Create a virtual environment'
+    desc: "Create a virtual environment"
     cmds:
       - |
-        if [ ! -d 'venv' ]; then
+        if [ ! -d "venv" ]; then
           python -m venv venv
         fi
 
   activate_venv:
-    desc: 'Activate the virtual environment'
+    desc: "Activate the virtual environment"
     cmds:
       - |
-        if [ '$(uname)' = 'Darwin' ]; then
+        if [ "$(uname)" = "Darwin" ]; then
           source venv/bin/activate
         else
           .\venv\Scripts\activate
         fi
 
   install_poetry_deps:
-    desc: 'Install Poetry dependencies'
+    desc: "Install Poetry dependencies"
     cmds:
       - poetry install
 
   generate_migrations:
-    desc: 'Generate and apply database migrations'
+    desc: "Generate and apply database migrations"
     cmds:
-      - alembic -n devdb revision --autogenerate -m 'init'
+      - alembic -n devdb revision --autogenerate -m "init"
       - alembic -n devdb upgrade head
 
   run_app:
-    desc: 'Run the application'
+    desc: "Run the application"
     cmds:
       - python -m app.main
 
   open_swagger:
-    desc: 'Open Swagger documentation'
+    desc: "Open Swagger documentation"
     cmds:
       - open http://127.0.0.1:8000/docs
 
   export_requirements:
-    desc: 'Export Poetry dependencies to requirements.txt'
+    desc: "Export Poetry dependencies to requirements.txt"
     cmds:
       - poetry export -f requirements.txt --only main --output requirements.txt --without-hashes
 
   lint:
-    desc: 'Run linter using ruff'
+    desc: "Run linter using ruff"
     cmds:
       - poetry run ruff src
 
   format:
-    desc: 'Run formatter using black'
+    desc: "Run formatter using black"
     cmds:
       - poetry run black src
 
   install_precommit:
-    desc: 'Install pre-commit hooks'
+    desc: "Install pre-commit hooks"
     cmds:
       - pre-commit install
 
   run_precommit:
-    desc: 'Run pre-commit hooks on all files'
+    desc: "Run pre-commit hooks on all files"
     cmds:
       - pre-commit run --all-files
 
   all:
-    desc: 'Run all tasks sequentially'
+    desc: "Run all tasks sequentially"
     cmds:
       - task: navigate_src
       - task: setup_db

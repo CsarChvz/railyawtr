@@ -1,4 +1,4 @@
-AWSTemplateFormatVersion: '2010-09-09'
+AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 Description: >
   SAM FastAPI Application
@@ -6,8 +6,8 @@ Description: >
 Globals:
   Api:
     BinaryMediaTypes:
-      - 'application/octet-stream'
-      - 'image~1*'
+      - "application/octet-stream"
+      - "image~1*"
   Function:
     Timeout: 60
     MemorySize: 256
@@ -16,14 +16,14 @@ Globals:
 Resources:
   ChopApi:
     Type: AWS::Serverless::Api
-    Description: 'Serverless API for CRUD operations'
+    Description: "Serverless API for CRUD operations"
     Properties:
-      Name: 'chop-api'
-      StageName: 'Prod'
+      Name: "chop-api"
+      StageName: "Prod"
       Cors:
-        AllowMethods: ''POST,GET,PUT,DELETE,OPTIONS''
-        AllowOrigin: ''*''
-        AllowHeaders: ''*''
+        AllowMethods: "'POST,GET,PUT,DELETE,OPTIONS'"
+        AllowOrigin: "'*'"
+        AllowHeaders: "'*'"
 
   HandlerFunction:
     Type: AWS::Serverless::Function
@@ -62,9 +62,9 @@ Resources:
 
 Outputs:
   Api:
-    Description: 'API Gateway endpoint URL for Prod environment for Mangum Handler Function'
-    Value: !Sub 'https://${ChopApi}.execute-api.${AWS::Region}.amazonaws.com/Prod'
+    Description: "API Gateway endpoint URL for Prod environment for Mangum Handler Function"
+    Value: !Sub "https://${ChopApi}.execute-api.${AWS::Region}.amazonaws.com/Prod"
 
   HandlerFunction:
-    Description: 'Mangum Handler Function ARN'
+    Description: "Mangum Handler Function ARN"
     Value: !GetAtt HandlerFunction.Arn

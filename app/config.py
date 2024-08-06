@@ -14,31 +14,31 @@ load_dotenv()
 
 oauth = OAuth()
 oauth.register(
-    'auth0',
-    client_id=os.getenv('AUTH0_CLIENT_ID'),
-    client_secret=os.getenv('AUTH0_CLIENT_SECRET'),
+    "auth0",
+    client_id=os.getenv("AUTH0_CLIENT_ID"),
+    client_secret=os.getenv("AUTH0_CLIENT_SECRET"),
     client_kwargs={
-        'scope': 'openid profile email',
+        "scope": "openid profile email",
     },
-    server_metadata_url=f'https://{os.getenv('AUTH0_DOMAIN')}/.well-known/openid-configuration',
+    server_metadata_url=f"https://{os.getenv("AUTH0_DOMAIN")}/.well-known/openid-configuration",
 )
 
 # See: https://hindenes.com/testing-fastapi-basesettings
-ENABLE_SETTINGS_CACHE = os.getenv('ENABLE_SETTINGS_CACHE', 'TRUE').lower() == 'true'
+ENABLE_SETTINGS_CACHE = os.getenv("ENABLE_SETTINGS_CACHE", "TRUE").lower() == "true"
 
 
 class Settings(BaseSettings):
-    app_name: str = 'FastAPI + Opena AI'
-    version: str = '0.1.0'
-    log_level: str = Field(default='INFO')
-    root_path: str = Field(default='/Prod')
+    app_name: str = "FastAPI + Opena AI"
+    version: str = "0.1.0"
+    log_level: str = Field(default="INFO")
+    root_path: str = Field(default="/Prod")
     aws_sam_local: bool = Field(default=False)
 
     def __init__(self, **data) -> None:
         super().__init__(**data)
 
         if self.aws_sam_local:
-            self.root_path = ''
+            self.root_path = ""
 
 
 @lru_cache

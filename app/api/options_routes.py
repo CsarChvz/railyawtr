@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
 @options_router.get(
-    '/question/{question_id}/options',
+    "/question/{question_id}/options",
     response_model=List[OptionResult],
 )
 def get_options_for_question(question_id: int, db: Session = Depends(get_db_session)):
@@ -32,10 +32,10 @@ def get_options_for_question(question_id: int, db: Session = Depends(get_db_sess
     except HTTPException as he:
         raise he
     except Exception:
-        raise HTTPException(status_code=500, detail='Internal server error')
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 @options_router.post(
-    '/question/{question_id}/options',
+    "/question/{question_id}/options",
     response_model=List[OptionResult],
     status_code=201,
 )
@@ -49,12 +49,12 @@ def create_option_for_question(
         raise he
     except Exception as e:
         db.rollback()
-        logger.error(f'Unexpected error while creating option: {e}')
-        raise HTTPException(status_code=500, detail='Internal server error')
+        logger.error(f"Unexpected error while creating option: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
     
 
 @options_router.post(
-    '/question/{question_id}/option-typed',
+    "/question/{question_id}/option-typed",
     response_model=OptionResult,
     status_code=201,
 )
@@ -70,13 +70,13 @@ def create_option_typed_for_question(
         raise he
     except Exception as e:
         db.rollback()
-        logger.error(f'Unexpected error while creating option: {e}')
-        raise HTTPException(status_code=500, detail='Internal server error')
+        logger.error(f"Unexpected error while creating option: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
     
 
 
 @options_router.put(
-    '/option/{option_id}',
+    "/option/{option_id}",
     response_model=OptionResult,
     status_code=201,
 )
@@ -91,11 +91,11 @@ def update_option(
         raise he
     except Exception as e:
         db.rollback()
-        logger.error(f'Unexpected error while updating option: {e}')
-        raise HTTPException(status_code=500, detail='Internal server error')
+        logger.error(f"Unexpected error while updating option: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 @options_router.delete(
-    '/option/{option_id}',
+    "/option/{option_id}",
     response_model=OptionResult,
     status_code=201,
 )
@@ -109,12 +109,12 @@ def delete_option(
         raise he
     except Exception as e:
         db.rollback()
-        logger.error(f'Unexpected error while deleting option: {e}')
-        raise HTTPException(status_code=500, detail='Internal server error')
+        logger.error(f"Unexpected error while deleting option: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
     
 
 @options_router.put(
-    '/option/{option_id}/is-selected',
+    "/option/{option_id}/is-selected",
     response_model=OptionResult,
     status_code=200,
 )
@@ -129,5 +129,5 @@ def update_is_selected(
         raise he
     except Exception as e:
         db.rollback()
-        logger.error(f'Unexpected error while updating is_selected: {e}')
-        raise HTTPException(status_code=500, detail='Internal server error')
+        logger.error(f"Unexpected error while updating is_selected: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")

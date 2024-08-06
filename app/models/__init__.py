@@ -15,4 +15,5 @@ from .investor_interest import InvestorInterest
 from .deck import Deck
 from .user_assignment import UserAssignment
 
+from .user_response import UserResponse
 load_dotenv()

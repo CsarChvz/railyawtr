@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
 @contacts_router.post(
-    '/users/{target_user_id}/follow',
+    "/users/{target_user_id}/follow",
     response_model=ContactResponseSchema,
 )
 def follow_user(target_user_id: str, user_id: str = Query(...), db: Session = Depends(get_db_session)):
@@ -31,11 +31,11 @@ def follow_user(target_user_id: str, user_id: str = Query(...), db: Session = De
         raise he
     except Exception as e:
         db.rollback()
-        logger.error(f'Unexpected error while following user: {e}')
-        raise HTTPException(status_code=500, detail='Internal server error')
+        logger.error(f"Unexpected error while following user: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 @contacts_router.delete(
-    '/users/{target_user_id}/unfollow',
+    "/users/{target_user_id}/unfollow",
     response_model=ContactResponseSchema,
 )
 def unfollow_user(target_user_id: str, user_id: str = Query(...), db: Session = Depends(get_db_session)):
@@ -45,11 +45,11 @@ def unfollow_user(target_user_id: str, user_id: str = Query(...), db: Session = 
         raise he
     except Exception as e:
         db.rollback()
-        logger.error(f'Unexpected error while unfollowing user: {e}')
-        raise HTTPException(status_code=500, detail='Internal server error')
+        logger.error(f"Unexpected error while unfollowing user: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 @contacts_router.get(
-    '/users/{user_id}/following',
+    "/users/{user_id}/following",
     response_model=List[ContactResponseSchema],
 )
 def get_following(user_id: str, db: Session = Depends(get_db_session), limit: int = 10, offset: int = 0):
@@ -58,11 +58,11 @@ def get_following(user_id: str, db: Session = Depends(get_db_session), limit: in
     except HTTPException as he:
         raise he
     except Exception as e:
-        logger.error(f'Unexpected error while retrieving following list: {e}')
-        raise HTTPException(status_code=500, detail='Internal server error')
+        logger.error(f"Unexpected error while retrieving following list: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 @contacts_router.get(
-    '/users/{user_id}/followers',
+    "/users/{user_id}/followers",
     response_model=List[ContactResponseSchema],
 )
 def get_followers(user_id: str, db: Session = Depends(get_db_session), limit: int = 10, offset: int = 0):
@@ -71,11 +71,11 @@ def get_followers(user_id: str, db: Session = Depends(get_db_session), limit: in
     except HTTPException as he:
         raise he
     except Exception as e:
-        logger.error(f'Unexpected error while retrieving followers list: {e}')
-        raise HTTPException(status_code=500, detail='Internal server error')
+        logger.error(f"Unexpected error while retrieving followers list: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 @contacts_router.get(
-    '/users/{user_id}/relationship/{target_user_id}',
+    "/users/{user_id}/relationship/{target_user_id}",
     response_model=ContactResponseSchema,
 )
 def get_relationship(user_id: str, target_user_id: str,db: Session = Depends(get_db_session)):
@@ -84,11 +84,11 @@ def get_relationship(user_id: str, target_user_id: str,db: Session = Depends(get
     except HTTPException as he:
         raise he
     except Exception as e:
-        logger.error(f'Unexpected error while retrieving relationship: {e}')
-        raise HTTPException(status_code=500, detail='Internal server error')
+        logger.error(f"Unexpected error while retrieving relationship: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 @contacts_router.get(
-    '/users/{user_id}/suggestions',
+    "/users/{user_id}/suggestions",
     response_model=List[ContactResponseSchema],
 )
 def get_suggestions(user_id: str, db: Session = Depends(get_db_session)):
@@ -97,5 +97,5 @@ def get_suggestions(user_id: str, db: Session = Depends(get_db_session)):
     except HTTPException as he:
         raise he
     except Exception as e:
-        logger.error(f'Unexpected error while retrieving suggestions: {e}')
-        raise HTTPException(status_code=500, detail='Internal server error')
+        logger.error(f"Unexpected error while retrieving suggestions: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
